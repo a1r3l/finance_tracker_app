@@ -5,6 +5,15 @@ class Stock < ApplicationRecord
         secret_token: Rails.application.credentials[Rails.env.to_sym].dig(:iex_client, :secret_token),
         endpoint: Rails.application.credentials[Rails.env.to_sym].dig(:iex_client, :endpoint)
     )
-    client.price(ticker_symbol)
+
+    begin
+      new(
+        ticker: ticker_symbol, 
+        name: client.company(ticker_symbol).company_name, 
+        last_price: client.price(ticker_symbol)
+      )
+    rescue => exception
+      return
+    end
   end
 end
