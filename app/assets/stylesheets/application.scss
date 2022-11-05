@@ -48,3 +48,17 @@
  .results-block {
     margin-bottom: 1rem;
  }
+
+ .nav-user-name {
+    color: white;
+    padding: 5px 10px;
+
+    a {
+        text-decoration: none;
+        color: white;
+
+        :hover {
+            color: #17a2b8;
+        }
+    }
+ }
