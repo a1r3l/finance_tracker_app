@@ -12,6 +12,11 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item nav-user-name">
+                    <%= link_to edit_user_registration_path do %>
+                        <span> <%= fa_icon 'user' %> <%= current_user.full_name %> </span>
+                    <% end %>
+                </li>
                 <li class="nav-item">
                     <%= link_to('Logout', destroy_user_session_path, class: 'btn btn-xs btn-danger btn-logout',method: :delete )%>
                 </li>
