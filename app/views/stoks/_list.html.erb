@@ -12,18 +12,37 @@
             <tbody class="table-group-divider">
                 <% @tracked_stocks.each do |stock| %>
                     <tr>
-                    <td> <%= stock.ticker %></td>
-                    <td> <%= stock.name %> </td>
-                    <td> <%= stock.last_price %> </td>
-                    <td>
-                        <%= 
-                            link_to('Remove',
-                            user_stock_path(stock),
-                            method: :delete,
-                            data: { confirm: 'Are you sure you want to delete this stock?' },
-                            class: 'btn btn-sm btn-warning')
-                        %>
-                    </td>
+                        <td> <%= stock.ticker %></td>
+                        <td> <%= stock.name %> </td>
+                        <td> <%= stock.last_price %> </td>
+                        <td>
+                            <% if current_user.can_track_stock?(stock.ticker) %>
+                                <%= link_to 'Add to Portfolio', 
+                                    user_stocks_path(user: current_user, ticker: stock.ticker), 
+                                    class: 'btn btn-xs btn-success',
+                                    method: :post
+                                %>
+                            <% elsif current_user.id != @user.id %>
+                                <span class="badge badge-secondary">
+                                    You are already tracking
+                                    <% if !current_user.under_stock_limit? %>
+                                        10 stoks.
+                                    <% end %>
+                                    <% if current_user.stock_aready_tracked?(stock.ticker) %>
+                                        this stock.
+                                    <% end %>
+                                </span>
+                            <% end %>
+                            <% if current_user.id == @user.id %>
+                                <%= 
+                                    link_to('Remove',
+                                    user_stock_path(stock),
+                                    method: :delete,
+                                    data: { confirm: 'Are you sure you want to delete this stock?' },
+                                    class: 'btn btn-sm btn-warning')
+                                %>
+                            <% end %>
+                        </td>
                     </tr>
                 <% end %>
             </tbody>

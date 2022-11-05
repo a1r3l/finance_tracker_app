@@ -28,4 +28,38 @@ class User < ApplicationRecord
     return "#{first_name} #{last_name}" if first_name || last_name
     "Anonymous"
   end
+
+  def self.first_name_matches(param)
+    matches('first_name', param)
+  end
+
+  def self.last_name_matches(param)
+    matches('last_name', param)
+  end
+
+  def self.email_matches(param)
+    matches('email', param)
+  end
+
+  def self.search(param)
+    param.strip!
+    match = ( first_name_matches(param) + 
+              last_name_matches(param) + 
+              email_matches(param)
+            ).uniq
+    return nil unless match
+    match
+  end
+
+  def self.matches(field_name, param)
+    where("#{field_name} like ?", "%#{ param }%")
+  end
+
+  def exclude_from_friends(friends_list)
+    friends_list.reject { |friend| friend.id == self.id }
+  end
+
+  def exclude_existent_friends(friends_list)
+    friends_list.select { |friend| !friend.in?(self.friends) }
+  end
 end

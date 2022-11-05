@@ -1,6 +1,5 @@
 class StocksController < ApplicationController
     def search
-
         if params[:stock].blank?
             respond_to do |format|
                 flash.now[:alert] = "Please enter a symbol to search."
